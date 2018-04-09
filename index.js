@@ -1,10 +1,13 @@
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var historyMessages = ["Bienvenido al chat..."];
 
+app.use('/static', express.static(__dirname + '/dist'));
+
 app.get('/', function(req, res){
-  res.sendFile('public/index.html' , { root : __dirname});
+  res.sendFile('dist/index.html' , { root : __dirname});
 });
 
 app.get('/hm', function(req, res){
