@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "my first socket.io chat",
   "private": true,
+  "main":"index.js"
   "scripts": {
-    "start" : "node index"
+    "start" : "node index.js"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
