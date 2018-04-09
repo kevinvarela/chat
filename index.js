@@ -4,7 +4,7 @@ var io = require('socket.io')(http);
 var historyMessages = ["Bienvenido al chat..."];
 
 app.get('/', function(req, res){
-  res.sendFile('/home/kevinvarela/Desktop/repositorios/chatSocket/index.html');
+  res.sendFile('public/index.html' , { root : __dirname});
 });
 
 app.get('/hm', function(req, res){
