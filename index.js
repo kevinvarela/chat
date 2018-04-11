@@ -6,6 +6,7 @@ var request = require('request');
 var historyMessages = {'messages':["Historial vacio"]};
 var urlDB = "https://api.myjson.com/bins/ui2pb";
 var usersConnected = 0;
+const LIMITE_DE_MENSAJES = 5000;
 
 app.use('/static', express.static(__dirname + '/dist'));
 
@@ -52,6 +53,10 @@ io.on('connection', function(socket){
 
 var updateDB = function(msg){
   historyMessages.messages.push(msg);
+  var historialLength = historyMessages.messages.length;
+  if( historialLength >= LIMITE_DE_MENSAJES){
+    historyMessages.messages = historyMessages.messages.slice(historialLength - LIMITE_DE_MENSAJES)
+  }
   request({url:urlDB, method:'PUT', json: historyMessages}, function(request, response){
   })
 }
