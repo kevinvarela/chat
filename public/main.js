@@ -1,7 +1,9 @@
 $(document).ready(function(){
 
 $.ajax({url: "/hm", success: function(result){
-  result.forEach(function(msg){$('#messages').append($('<li>').text(msg));})
+  result.messages.forEach(function(msg){$('#messages').append($('<li>').text(msg));})
+  scrollToBottom();
+  $('.signal').addClass('hide');
 }});
   var socket = io();
   $('form').submit(function(){
@@ -9,8 +11,13 @@ $.ajax({url: "/hm", success: function(result){
     $('#m').val('');
     return false;
   });
+
   socket.on('chat message', function(msg){
     $('#messages').append($('<li>').text(msg));
-    window.scrollTo(0,document.body.scrollHeight);
+    scrollToBottom();
   });
 });
+
+var scrollToBottom = function(){
+  $("html, body").animate({ scrollTop: $(document).height() }, 500);
+}
