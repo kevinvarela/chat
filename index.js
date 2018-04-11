@@ -52,6 +52,7 @@ io.on('connection', function(socket){
 
 var updateDB = function(msg){
   historyMessages.messages.push(msg);
+  historyMessages.messages = historyMessages.messages.slice(4000);
   request({url:urlDB, method:'PUT', json: historyMessages}, function(request, response){
   })
 }
