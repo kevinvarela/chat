@@ -5,11 +5,19 @@ $.ajax({url: "/hm", success: function(result){
   scrollToBottom();
   $('.signal').addClass('hide');
 }});
+
   var socket = io();
   $('form').submit(function(){
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
+    var message = $('#m').val();
+    if(message.trim() !== ""){
+      socket.emit('chat message', message);
+      $('#m').val('');
+      return false;
+    }
+    else {
+      alert("no se puede ser hacker aca...")
+      return false;
+    }
   });
 
   socket.on('chat message', function(msg){

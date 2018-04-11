@@ -1,0 +1,16 @@
+
+
+kev.messages = kev.messages.filter(x => x.lenght < 400)
+
+var limpio = JSON.stringify(kev)
+
+$.ajax({
+    url:"https://api.myjson.com/bins/ui2pb",
+    type:"PUT",
+    data:limpio,
+    contentType:"application/json; charset=utf-8",
+    dataType:"json",
+    success: function(data, textStatus, jqXHR){
+
+    }
+});
