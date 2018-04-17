@@ -3,7 +3,9 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var request = require('request');
-var historyMessages = {'messages':["Historial vacio"]};
+var historyMessages = {'messages':["Bienvenido a KVA-CHAT 1.3..."]};
+var fs = require('fs');
+
 var urlDB = "https://api.myjson.com/bins/ui2pb";
 var usersConnected = 0;
 const LIMITE_DE_MENSAJES = 3000;
@@ -15,18 +17,22 @@ app.get('/', function(req, res){
 });
 
 app.get('/hm', function(req, res){
-  request.get(urlDB, function(err, httpResponse, body) {
-    historyMessages = JSON.parse(body);
-    res.send(historyMessages);
-  })
+  // request.get(urlDB, function(err, httpResponse, body) {
+  //   historyMessages = JSON.parse(body);
+  // })
+  let dataString = fs.readFileSync('dataBase.json');
+  historyMessages = JSON.parse(dataString);
+  res.send(historyMessages);
 });
 
 app.get('/resetK', function(req, res){
-  var historyMessagesReset = {'messages':["Bienvenido a KVA-CHAT 1.2..."]};
-  request({url:urlDB, method:'PUT', json: historyMessagesReset}, function(request, response){
-    console.log("Method PUT: 'Reset DB'");
+  var historyMessagesReset = {'messages':["Bienvenido a KVA-CHAT 1.3..."]};
+  // request({url:urlDB, method:'PUT', json: historyMessagesReset}, function(request, response){
+    // console.log("Method PUT: 'Reset DB'");
+    fs.writeFile("dataBase.json", JSON.stringify(historyMessagesReset));
+    console.log("-- Reset DB --");
     res.send("History reset")
-  })
+  // })
 });
 
 io.on('connection', function(socket){
@@ -59,8 +65,8 @@ var updateDB = function(msg){
     historyMessages.messages = historyMessages.messages.slice(historialLength - LIMITE_DE_MENSAJES)
     console.log("Slice messages to: "+ historyMessages.messages.length);
   }
-  request({url:urlDB, method:'PUT', json: historyMessages}, function(request, response){
-  })
+  // request({url:urlDB, method:'PUT', json: historyMessages}, function(request, response){
+    fs.writeFile("dataBase.json", JSON.stringify(historyMessages));
 }
 
 var port = process.env.PORT || 3000;
