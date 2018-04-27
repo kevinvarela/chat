@@ -3,12 +3,18 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var request = require('request');
-var historyMessages = {'messages':["Bienvenido a KVA-CHAT 1.3..."]};
+var historyMessages = {'messages':["Bienvenido a KVA-CHAT 2.0..."]};
 var fs = require('fs');
 
 var urlDB = "https://api.myjson.com/bins/ui2pb";
 var usersConnected = 0;
 const LIMITE_DE_MENSAJES = 3000;
+
+//GIPHY MODULE
+var giphy = require('apigiphy');
+const API_KEI = 'pLSnKQmevBqaHXVoXHycTcZYISiOxEBk'
+giphy = giphy({api_key:API_KEI});
+//
 
 app.use('/static', express.static(__dirname + '/dist'));
 
@@ -24,7 +30,7 @@ app.get('/hm', function(req, res){
 });
 
 app.get('/resetK', function(req, res){
-  var historyMessagesReset = {'messages':["Bienvenido a KVA-CHAT 1.3..."]};
+  var historyMessagesReset = {'messages':["Bienvenido a KVA-CHAT 2.0...","New features @@@ GIF'S @@@"]};
   request({url:urlDB, method:'PUT', json: historyMessagesReset}, function(request, response){
     console.log("Method PUT: 'Reset DB'");
     res.send("History reset")
@@ -48,8 +54,22 @@ io.on('connection', function(socket){
 
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
-    updateDB(msg);
-    io.emit('chat message', msg);
+    if(msg.includes('@gif')){
+      var word = msg.split('@gif')[1].trim();
+      var urlGif = "";
+      giphy.random({tag:word})
+      .then(function(response){
+        console.log(response.data.image_original_url);
+        urlGif = response.data.image_original_url;
+        updateDB(urlGif);
+        io.emit('chat message', urlGif);
+      }, function(error){
+        console.log(error);
+      });
+    }else{
+      updateDB(msg);
+      io.emit('chat message', msg);
+    }
   });
 });
 
