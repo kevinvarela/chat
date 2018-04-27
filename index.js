@@ -19,8 +19,8 @@ app.get('/', function(req, res){
 app.get('/hm', function(req, res){
   request.get(urlDB, function(err, httpResponse, body) {
     historyMessages = JSON.parse(body);
+    res.send(historyMessages);
   })
-  res.send(historyMessages);
 });
 
 app.get('/resetK', function(req, res){
