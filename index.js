@@ -12,8 +12,8 @@ const LIMITE_DE_MENSAJES = 3000;
 
 //GIPHY MODULE
 var giphy = require('apigiphy');
-const API_KEI = 'pLSnKQmevBqaHXVoXHycTcZYISiOxEBk'
-giphy = giphy({api_key:API_KEI});
+const API_KEY = 'pLSnKQmevBqaHXVoXHycTcZYISiOxEBk'
+giphy = giphy({api_key:API_KEY});
 //
 
 app.use('/static', express.static(__dirname + '/dist'));
